@@ -14,6 +14,7 @@
 		FE09639A28ABA0A700590300 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FE09639828ABA0A700590300 /* Main.storyboard */; };
 		FE09639C28ABA0A900590300 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FE09639B28ABA0A900590300 /* Assets.xcassets */; };
 		FE09639F28ABA0A900590300 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FE09639D28ABA0A900590300 /* LaunchScreen.storyboard */; };
+		FECB663028ABB635005F45DA /* FaceTrackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECB662F28ABB635005F45DA /* FaceTrackViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		FE09639B28ABA0A900590300 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FE09639E28ABA0A900590300 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FE0963A028ABA0A900590300 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FECB662F28ABB635005F45DA /* FaceTrackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceTrackViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,7 +58,6 @@
 				DCDF07D6EEA270B8F63B0EFB /* Pods-VisionUsageExample.debug.xcconfig */,
 				7ECE423B14A2B3FCB439F95F /* Pods-VisionUsageExample.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -84,6 +85,7 @@
 				FE09639228ABA0A700590300 /* AppDelegate.swift */,
 				FE09639428ABA0A700590300 /* SceneDelegate.swift */,
 				FE09639628ABA0A700590300 /* ViewController.swift */,
+				FECB662F28ABB635005F45DA /* FaceTrackViewController.swift */,
 				FE09639828ABA0A700590300 /* Main.storyboard */,
 				FE09639B28ABA0A900590300 /* Assets.xcassets */,
 				FE09639D28ABA0A900590300 /* LaunchScreen.storyboard */,
@@ -210,6 +212,7 @@
 				FE09639728ABA0A700590300 /* ViewController.swift in Sources */,
 				FE09639328ABA0A700590300 /* AppDelegate.swift in Sources */,
 				FE09639528ABA0A700590300 /* SceneDelegate.swift in Sources */,
+				FECB663028ABB635005F45DA /* FaceTrackViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
