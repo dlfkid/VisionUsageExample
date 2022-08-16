@@ -1,0 +1,22 @@
+PODS:
+  - PinLayout (1.10.3)
+
+DEPENDENCIES:
+  - PinLayout (from `https://github.com/layoutBox/PinLayout.git`, tag `1.10.3`)
+
+EXTERNAL SOURCES:
+  PinLayout:
+    :git: https://github.com/layoutBox/PinLayout.git
+    :tag: 1.10.3
+
+CHECKOUT OPTIONS:
+  PinLayout:
+    :git: https://github.com/layoutBox/PinLayout.git
+    :tag: 1.10.3
+
+SPEC CHECKSUMS:
+  PinLayout: 0090ccbf29ae69af6ae5a15eaeaf27ed7b2c4d83
+
+PODFILE CHECKSUM: 1fdb25026c87d89379c732eda442de9c31209120
+
+COCOAPODS: 1.11.3
