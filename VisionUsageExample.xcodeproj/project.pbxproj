@@ -14,6 +14,9 @@
 		FE09639A28ABA0A700590300 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FE09639828ABA0A700590300 /* Main.storyboard */; };
 		FE09639C28ABA0A900590300 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FE09639B28ABA0A900590300 /* Assets.xcassets */; };
 		FE09639F28ABA0A900590300 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FE09639D28ABA0A900590300 /* LaunchScreen.storyboard */; };
+		FE96AC56291CE32A00CAADC0 /* FacePresentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE96AC55291CE32A00CAADC0 /* FacePresentView.swift */; };
+		FE96AC58291CF31400CAADC0 /* LaserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE96AC57291CF31400CAADC0 /* LaserView.swift */; };
+		FE96AC5A291D003E00CAADC0 /* CoreGraphicExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE96AC59291D003E00CAADC0 /* CoreGraphicExtensions.swift */; };
 		FECB663028ABB635005F45DA /* FaceTrackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECB662F28ABB635005F45DA /* FaceTrackViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -29,6 +32,9 @@
 		FE09639B28ABA0A900590300 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FE09639E28ABA0A900590300 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FE0963A028ABA0A900590300 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FE96AC55291CE32A00CAADC0 /* FacePresentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacePresentView.swift; sourceTree = "<group>"; };
+		FE96AC57291CF31400CAADC0 /* LaserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaserView.swift; sourceTree = "<group>"; };
+		FE96AC59291D003E00CAADC0 /* CoreGraphicExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreGraphicExtensions.swift; sourceTree = "<group>"; };
 		FECB662F28ABB635005F45DA /* FaceTrackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceTrackViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -86,6 +92,9 @@
 				FE09639428ABA0A700590300 /* SceneDelegate.swift */,
 				FE09639628ABA0A700590300 /* ViewController.swift */,
 				FECB662F28ABB635005F45DA /* FaceTrackViewController.swift */,
+				FE96AC55291CE32A00CAADC0 /* FacePresentView.swift */,
+				FE96AC57291CF31400CAADC0 /* LaserView.swift */,
+				FE96AC59291D003E00CAADC0 /* CoreGraphicExtensions.swift */,
 				FE09639828ABA0A700590300 /* Main.storyboard */,
 				FE09639B28ABA0A900590300 /* Assets.xcassets */,
 				FE09639D28ABA0A900590300 /* LaunchScreen.storyboard */,
@@ -209,9 +218,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FE96AC56291CE32A00CAADC0 /* FacePresentView.swift in Sources */,
 				FE09639728ABA0A700590300 /* ViewController.swift in Sources */,
 				FE09639328ABA0A700590300 /* AppDelegate.swift in Sources */,
 				FE09639528ABA0A700590300 /* SceneDelegate.swift in Sources */,
+				FE96AC5A291D003E00CAADC0 /* CoreGraphicExtensions.swift in Sources */,
+				FE96AC58291CF31400CAADC0 /* LaserView.swift in Sources */,
 				FECB663028ABB635005F45DA /* FaceTrackViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -360,6 +372,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = VSH7W5Y66V;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VisionUsageExample/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -388,6 +401,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = VSH7W5Y66V;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VisionUsageExample/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
