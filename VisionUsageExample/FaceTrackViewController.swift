@@ -11,20 +11,22 @@ import AVFoundation
 
 class FaceTrackViewController: UIViewController {
     
-    var sequenceHandler = VNSequenceRequestHandler()
+    private var sequenceHandler = VNSequenceRequestHandler()
     
-    let cameraView = UIView()
+    private let cameraView = UIView()
     
-    let faceDetectView = FacePresentView()
+    private let faceDetectView = FacePresentView()
     
-    let laserView = LaserView()
+    private let laserView = LaserView()
     
-    let captureButton:UIButton = {
+    private let captureButton:UIButton = {
         let captureButton = UIButton(type: .system)
         captureButton.setTitle("开始捕捉", for: .normal)
         captureButton.setTitle("停止捕捉", for: .selected)
         return captureButton
     }()
+    
+    private var faceViewHidden: Bool = false
     
     private let visionSequenceHandler = VNSequenceRequestHandler()
     private lazy var cameraLayer: AVCaptureVideoPreviewLayer = AVCaptureVideoPreviewLayer(session: self.captureSession)
@@ -88,6 +90,11 @@ extension FaceTrackViewController: AVCaptureVideoDataOutputSampleBufferDelegate 
             return
         }
         let detectFaceRequest = VNDetectFaceRectanglesRequest(completionHandler: detectedFace(request:error:))
+        do {
+            try sequenceHandler.perform([detectFaceRequest], on: imageBuffer, orientation: .leftMirrored)
+        } catch {
+            print(error.localizedDescription)
+        }
     }
     
     func captureOutput(_ output: AVCaptureOutput, didDrop sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
@@ -99,8 +106,22 @@ extension FaceTrackViewController: AVCaptureVideoDataOutputSampleBufferDelegate 
             faceDetectView.cleanAllFaceScannedData()
             return
         }
-        
+        let limit = LaserViewLimit(maxX: view.bounds.maxX, maxY: view.bounds.maxY, midY: view.bounds.midY)
+        faceViewHidden ? laserView.updateLaserView(for: result, limit: limit, previewLayer: self.cameraLayer) : faceDetectView.updateFaceView(for: result, previewLayer: self.cameraLayer)
     }
+}
+
+func createLandmark(point: CGPoint, to rect: CGRect, previewLayer: AVCaptureVideoPreviewLayer) -> CGPoint {
+    let absolute = point.absolutePoint(in: rect)
+    let converted = previewLayer.layerPointConverted(fromCaptureDevicePoint: absolute)
+    return converted
+}
+
+func createLandmarks(points: [CGPoint]?, to rect: CGRect, previewLayer: AVCaptureVideoPreviewLayer) -> [CGPoint]? {
+    guard let points = points else {
+        return nil
+    }
+    return points.compactMap { createLandmark(point: $0, to: rect, previewLayer: previewLayer) }
 }
 
 extension FacePresentView {
@@ -108,19 +129,6 @@ extension FacePresentView {
         let origin = previewLayer.layerPointConverted(fromCaptureDevicePoint: rect.origin)
         let size = previewLayer.layerPointConverted(fromCaptureDevicePoint: rect.size.bottomRightPoint)
         return CGRect(origin: origin, size: size.pointSize)
-    }
-    
-    func createLandmark(point: CGPoint, to rect: CGRect, previewLayer: AVCaptureVideoPreviewLayer) -> CGPoint {
-        let absolute = point.absolutePoint(in: rect)
-        let converted = previewLayer.layerPointConverted(fromCaptureDevicePoint: absolute)
-        return converted
-    }
-
-    func createLandmarks(points: [CGPoint]?, to rect: CGRect, previewLayer: AVCaptureVideoPreviewLayer) -> [CGPoint]? {
-        guard let points = points else {
-            return nil
-        }
-        return points.compactMap { createLandmark(point: $0, to: rect, previewLayer: previewLayer) }
     }
     
     func updateFaceView(for result: VNFaceObservation, previewLayer: AVCaptureVideoPreviewLayer) {
@@ -159,6 +167,38 @@ extension FacePresentView {
         }
         if let faceCountourPoints = createLandmarks(points: landmarks.faceContour?.normalizedPoints, to: box, previewLayer: previewLayer) {
             self.faceContour = faceCountourPoints
+        }
+    }
+}
+
+extension LaserView {
+    func updateLaserView(for result: VNFaceObservation, limit: LaserViewLimit, previewLayer: AVCaptureVideoPreviewLayer) {
+        cleanLasers()
+        let yaw = result.yaw ?? 0.0
+        guard yaw != 0.0 else {
+            return
+        }
+        var origins: [CGPoint] = []
+        if let point = result.landmarks?.leftPupil?.normalizedPoints.first {
+            let origin = createLandmark(point: point, to: result.boundingBox, previewLayer: previewLayer)
+            origins.append(origin)
+        }
+        if let point = result.landmarks?.rightPupil?.normalizedPoints.first {
+            let origin = createLandmark(point: point, to: result.boundingBox, previewLayer: previewLayer)
+            origins.append(origin)
+        }
+        let avgY = origins.map { point in
+            point.y
+        }.reduce(0.0, +) / CGFloat(origins.count)
+        let foucusY = (avgY < limit.midY) ? 0.75 * limit.maxY : 0.25 * limit.maxY
+        let foucusX = yaw.doubleValue < 0.0 ? -100.0 : limit.maxX + 100.0
+        let foucus = CGPoint(x: foucusX, y: foucusY)
+        for origin in origins {
+            let laser = Laser(origin: origin, focus: foucus)
+            add(laser: laser)
+        }
+        DispatchQueue.main.async {
+            self.setNeedsDisplay()
         }
     }
 }

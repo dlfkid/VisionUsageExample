@@ -12,6 +12,12 @@ struct Laser {
     var focus: CGPoint
 }
 
+struct LaserViewLimit {
+    let maxX: CGFloat
+    let maxY: CGFloat
+    let midY: CGFloat
+}
+
 class LaserView: UIView {
     
     private var lasers: [Laser] = []
