@@ -9,6 +9,16 @@ import UIKit
 
 class FacePresentView: UIView {
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        isOpaque = false
+        clearsContextBeforeDrawing = true
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     /// 左眼
     var leftEye: [CGPoint] = []
     
@@ -93,25 +103,25 @@ extension FacePresentView {
         }
         if !leftEyebrow.isEmpty {
             // 添加眼部的点为绘制路经
-            context.addLines(between: rightEye)
+            context.addLines(between: leftEyebrow)
             // 绘制眼部轮廓
             context.strokePath()
         }
         if !rightEyebrow.isEmpty {
             // 添加眼部的点为绘制路经
-            context.addLines(between: rightEye)
+            context.addLines(between: rightEyebrow)
             // 绘制眼部轮廓
             context.strokePath()
         }
         if !nose.isEmpty {
             // 添加眼部的点为绘制路经
-            context.addLines(between: rightEye)
+            context.addLines(between: nose)
             // 绘制眼部轮廓
             context.strokePath()
         }
         if !innerLips.isEmpty {
             // 添加眼部的点为绘制路经
-            context.addLines(between: rightEye)
+            context.addLines(between: innerLips)
             // 封闭添加的绘制路经
             context.closePath()
             // 绘制眼部轮廓
@@ -119,7 +129,7 @@ extension FacePresentView {
         }
         if !outerLips.isEmpty {
             // 添加眼部的点为绘制路经
-            context.addLines(between: rightEye)
+            context.addLines(between: outerLips)
             // 封闭添加的绘制路经
             context.closePath()
             // 绘制眼部轮廓
@@ -127,10 +137,9 @@ extension FacePresentView {
         }
         if !faceContour.isEmpty {
             // 添加眼部的点为绘制路经
-            context.addLines(between: rightEye)
+            context.addLines(between: faceContour)
             // 绘制眼部轮廓
             context.strokePath()
         }
-        
     }
 }

@@ -11,9 +11,12 @@ import AVFoundation
 
 class FaceTrackViewController: UIViewController {
     
-    private var sequenceHandler = VNSequenceRequestHandler()
+    enum FaceRecognintionMode {
+        case FaceLandmark
+        case FaceLaser
+    }
     
-    private let cameraView = UIView()
+    private var sequenceHandler = VNSequenceRequestHandler()
     
     private let faceDetectView = FacePresentView()
     
@@ -21,53 +24,85 @@ class FaceTrackViewController: UIViewController {
     
     private let captureButton:UIButton = {
         let captureButton = UIButton(type: .system)
-        captureButton.setTitle("开始捕捉", for: .normal)
-        captureButton.setTitle("停止捕捉", for: .selected)
+        captureButton.setTitle("Start", for: .normal)
+        captureButton.setTitle("Stop", for: .selected)
         return captureButton
     }()
     
-    private var faceViewHidden: Bool = false
+    private let recognModeToggleButton: UIButton = {
+        let captureButton = UIButton(type: .system)
+        captureButton.setTitle("FaceLandMark", for: .normal)
+        captureButton.setTitle("FaceLaser", for: .selected)
+        return captureButton
+    }()
+    
+    let videoDataQueue = DispatchQueue(label: "video data queue", qos: .userInitiated, attributes: [], autoreleaseFrequency: .workItem)
+    
+    private var faceRecognMode: FaceRecognintionMode = .FaceLandmark
     
     private let visionSequenceHandler = VNSequenceRequestHandler()
     private lazy var cameraLayer: AVCaptureVideoPreviewLayer = AVCaptureVideoPreviewLayer(session: self.captureSession)
-    private lazy var captureSession: AVCaptureSession = {
-        let session = AVCaptureSession()
-        session.sessionPreset = AVCaptureSession.Preset.photo
-        guard
-            let backCamera = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back),
-            let input = try? AVCaptureDeviceInput(device: backCamera)
-        else { return session }
-        session.addInput(input)
-        return session
-    }()
+    private var captureSession: AVCaptureSession = AVCaptureSession()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "人脸追踪"
         view.backgroundColor = .white
-        view.addSubview(cameraView)
         view.addSubview(faceDetectView)
         view.addSubview(laserView)
         view.addSubview(captureButton)
+        view.addSubview(recognModeToggleButton)
         captureButton.addTarget(self, action: #selector(captureButtonDidTappedAction(sender:)), for: .touchUpInside)
-        cameraView.layer.addSublayer(cameraLayer)
-        // register to receive buffers from the camera
+        recognModeToggleButton.addTarget(self, action: #selector(recognModeToggleButtonDidTappedAction(sender:)), for: .touchUpInside)
+        laserView.isHidden = true
+        configCaptureSession()
+    }
+    
+    private func configCaptureSession() {
+        // Define the capture device we want to use
+        guard let camera = AVCaptureDevice.default(.builtInWideAngleCamera,
+                                                   for: .video,
+                                                   position: .front) else {
+          fatalError("No front video camera available")
+        }
+        
+        // Connect the camera to the capture session input
+        do {
+          let cameraInput = try AVCaptureDeviceInput(device: camera)
+          captureSession.addInput(cameraInput)
+        } catch {
+          fatalError(error.localizedDescription)
+        }
+        
+        // Create the video data output
         let videoOutput = AVCaptureVideoDataOutput()
-        videoOutput.setSampleBufferDelegate(self, queue: DispatchQueue(label: "MyQueue"))
-        self.captureSession.addOutput(videoOutput)
+        videoOutput.setSampleBufferDelegate(self, queue: videoDataQueue)
+        videoOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA]
+        
+        // Add the video output to the capture session
+        captureSession.addOutput(videoOutput)
+        
+        let videoConnection = videoOutput.connection(with: .video)
+        videoConnection?.videoOrientation = .portrait
+        
+        // Configure the preview layer
+        cameraLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+        cameraLayer.videoGravity = .resizeAspectFill
+        cameraLayer.frame = view.bounds
+        view.layer.insertSublayer(cameraLayer, at: 0)
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        cameraView.pin.all(view.pin.safeArea)
         faceDetectView.pin.all(view.pin.safeArea)
         laserView.pin.all(view.pin.safeArea)
         captureButton.pin.bottom(100).width(120).height(44).hCenter(0)
+        recognModeToggleButton.pin.above(of: captureButton, aligned: .center).marginBottom(10).sizeToFit()
     }
 }
 
 extension FaceTrackViewController {
-    @objc private func captureButtonDidTappedAction(sender:UIButton) {
+    @objc private func captureButtonDidTappedAction(sender: UIButton) {
         sender.isSelected = !sender.isSelected
         if (sender.isSelected) {
             DispatchQueue.global().async {
@@ -79,6 +114,19 @@ extension FaceTrackViewController {
                 // end the session
                 self.captureSession.stopRunning()
             }
+        }
+    }
+    
+    @objc private func recognModeToggleButtonDidTappedAction(sender: UIButton) {
+        sender.isSelected.toggle()
+        faceRecognMode = sender.isSelected ? .FaceLaser : .FaceLandmark
+        switch faceRecognMode {
+        case .FaceLandmark:
+            faceDetectView.isHidden = false
+            laserView.isHidden = true
+        case .FaceLaser:
+            faceDetectView.isHidden = true
+            laserView.isHidden = false
         }
     }
 }
@@ -106,8 +154,16 @@ extension FaceTrackViewController: AVCaptureVideoDataOutputSampleBufferDelegate 
             faceDetectView.cleanAllFaceScannedData()
             return
         }
-        let limit = LaserViewLimit(maxX: view.bounds.maxX, maxY: view.bounds.maxY, midY: view.bounds.midY)
-        faceViewHidden ? laserView.updateLaserView(for: result, limit: limit, previewLayer: self.cameraLayer) : faceDetectView.updateFaceView(for: result, previewLayer: self.cameraLayer)
+        var limit = LaserViewLimit(maxX: 0, maxY: 0, midY: 0)
+        DispatchQueue.main.sync {
+            limit = LaserViewLimit(maxX: view.bounds.maxX, maxY: view.bounds.maxY, midY: view.bounds.midY)
+        }
+        switch faceRecognMode {
+        case .FaceLandmark:
+            faceDetectView.updateFaceView(for: result, previewLayer: cameraLayer)
+        case .FaceLaser:
+            laserView.updateLaserView(for: result, limit: limit, previewLayer: cameraLayer)
+        }
     }
 }
 
@@ -138,35 +194,35 @@ extension FacePresentView {
             }
         }
         let box = result.boundingBox
-        self.boundingBox = convertRect(rect: box, previewLayer: previewLayer)
+        boundingBox = convertRect(rect: box, previewLayer: previewLayer)
         
         guard let landmarks = result.landmarks else {
             return
         }
         
         if let leftEyePoints = createLandmarks(points: landmarks.leftEye?.normalizedPoints, to: box, previewLayer: previewLayer) {
-            self.leftEye = leftEyePoints
+            leftEye = leftEyePoints
         }
         if let rightEyePoints = createLandmarks(points: landmarks.rightEye?.normalizedPoints, to: box, previewLayer: previewLayer) {
-            self.rightEye = rightEyePoints
+            rightEye = rightEyePoints
         }
         if let leftEyebrowPoints = createLandmarks(points: landmarks.leftEyebrow?.normalizedPoints, to: box, previewLayer: previewLayer) {
-            self.leftEyebrow = leftEyebrowPoints
+            leftEyebrow = leftEyebrowPoints
         }
         if let rightEyebrowPoints = createLandmarks(points: landmarks.rightEyebrow?.normalizedPoints, to: box, previewLayer: previewLayer) {
-            self.rightEyebrow = rightEyebrowPoints
+            rightEyebrow = rightEyebrowPoints
         }
         if let nosePoints = createLandmarks(points: landmarks.nose?.normalizedPoints, to: box, previewLayer: previewLayer) {
-            self.nose = nosePoints
+            nose = nosePoints
         }
         if let innerLipsPoints = createLandmarks(points: landmarks.innerLips?.normalizedPoints, to: box, previewLayer: previewLayer) {
-            self.innerLips = innerLipsPoints
+            innerLips = innerLipsPoints
         }
         if let outterLipsPoints = createLandmarks(points: landmarks.outerLips?.normalizedPoints, to: box, previewLayer: previewLayer) {
-            self.outerLips = outterLipsPoints
+            outerLips = outterLipsPoints
         }
         if let faceCountourPoints = createLandmarks(points: landmarks.faceContour?.normalizedPoints, to: box, previewLayer: previewLayer) {
-            self.faceContour = faceCountourPoints
+            faceContour = faceCountourPoints
         }
     }
 }
