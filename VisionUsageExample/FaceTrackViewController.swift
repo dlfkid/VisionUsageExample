@@ -40,7 +40,6 @@ class FaceTrackViewController: UIViewController {
     
     private var faceRecognMode: FaceRecognintionMode = .FaceLandmark
     
-    private let visionSequenceHandler = VNSequenceRequestHandler()
     private lazy var cameraLayer: AVCaptureVideoPreviewLayer = AVCaptureVideoPreviewLayer(session: self.captureSession)
     private var captureSession: AVCaptureSession = AVCaptureSession()
 
@@ -94,8 +93,8 @@ class FaceTrackViewController: UIViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        faceDetectView.pin.all(view.pin.safeArea)
-        laserView.pin.all(view.pin.safeArea)
+        faceDetectView.pin.all()
+        laserView.pin.all()
         captureButton.pin.bottom(100).width(120).height(44).hCenter(0)
         recognModeToggleButton.pin.above(of: captureButton, aligned: .center).marginBottom(10).sizeToFit()
     }
@@ -137,7 +136,7 @@ extension FaceTrackViewController: AVCaptureVideoDataOutputSampleBufferDelegate 
         guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
             return
         }
-        let detectFaceRequest = VNDetectFaceRectanglesRequest(completionHandler: detectedFace(request:error:))
+        let detectFaceRequest = VNDetectFaceLandmarksRequest(completionHandler: detectedFace(request:error:))
         do {
             try sequenceHandler.perform([detectFaceRequest], on: imageBuffer, orientation: .leftMirrored)
         } catch {
