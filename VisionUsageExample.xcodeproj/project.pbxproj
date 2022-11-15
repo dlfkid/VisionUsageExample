@@ -18,6 +18,8 @@
 		FE96AC58291CF31400CAADC0 /* LaserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE96AC57291CF31400CAADC0 /* LaserView.swift */; };
 		FE96AC5A291D003E00CAADC0 /* CoreGraphicExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE96AC59291D003E00CAADC0 /* CoreGraphicExtensions.swift */; };
 		FECB663028ABB635005F45DA /* FaceTrackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECB662F28ABB635005F45DA /* FaceTrackViewController.swift */; };
+		FECF643E29233F760064CC28 /* PhotoStackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECF643D29233F760064CC28 /* PhotoStackViewController.swift */; };
+		FECF64432923438A0064CC28 /* RecordButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECF64422923438A0064CC28 /* RecordButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +38,8 @@
 		FE96AC57291CF31400CAADC0 /* LaserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaserView.swift; sourceTree = "<group>"; };
 		FE96AC59291D003E00CAADC0 /* CoreGraphicExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreGraphicExtensions.swift; sourceTree = "<group>"; };
 		FECB662F28ABB635005F45DA /* FaceTrackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceTrackViewController.swift; sourceTree = "<group>"; };
+		FECF643D29233F760064CC28 /* PhotoStackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoStackViewController.swift; sourceTree = "<group>"; };
+		FECF64422923438A0064CC28 /* RecordButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,16 +95,42 @@
 				FE09639228ABA0A700590300 /* AppDelegate.swift */,
 				FE09639428ABA0A700590300 /* SceneDelegate.swift */,
 				FE09639628ABA0A700590300 /* ViewController.swift */,
-				FECB662F28ABB635005F45DA /* FaceTrackViewController.swift */,
-				FE96AC55291CE32A00CAADC0 /* FacePresentView.swift */,
-				FE96AC57291CF31400CAADC0 /* LaserView.swift */,
-				FE96AC59291D003E00CAADC0 /* CoreGraphicExtensions.swift */,
+				FECF643F29233FE30064CC28 /* FaceRecogn */,
+				FECF644029233FFA0064CC28 /* PhtotoStack */,
+				FECF6441292340060064CC28 /* Tools */,
 				FE09639828ABA0A700590300 /* Main.storyboard */,
 				FE09639B28ABA0A900590300 /* Assets.xcassets */,
 				FE09639D28ABA0A900590300 /* LaunchScreen.storyboard */,
 				FE0963A028ABA0A900590300 /* Info.plist */,
 			);
 			path = VisionUsageExample;
+			sourceTree = "<group>";
+		};
+		FECF643F29233FE30064CC28 /* FaceRecogn */ = {
+			isa = PBXGroup;
+			children = (
+				FECB662F28ABB635005F45DA /* FaceTrackViewController.swift */,
+				FE96AC55291CE32A00CAADC0 /* FacePresentView.swift */,
+				FE96AC57291CF31400CAADC0 /* LaserView.swift */,
+			);
+			path = FaceRecogn;
+			sourceTree = "<group>";
+		};
+		FECF644029233FFA0064CC28 /* PhtotoStack */ = {
+			isa = PBXGroup;
+			children = (
+				FECF643D29233F760064CC28 /* PhotoStackViewController.swift */,
+				FECF64422923438A0064CC28 /* RecordButton.swift */,
+			);
+			path = PhtotoStack;
+			sourceTree = "<group>";
+		};
+		FECF6441292340060064CC28 /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				FE96AC59291D003E00CAADC0 /* CoreGraphicExtensions.swift */,
+			);
+			path = Tools;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -218,7 +248,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FECF643E29233F760064CC28 /* PhotoStackViewController.swift in Sources */,
 				FE96AC56291CE32A00CAADC0 /* FacePresentView.swift in Sources */,
+				FECF64432923438A0064CC28 /* RecordButton.swift in Sources */,
 				FE09639728ABA0A700590300 /* ViewController.swift in Sources */,
 				FE09639328ABA0A700590300 /* AppDelegate.swift in Sources */,
 				FE09639528ABA0A700590300 /* SceneDelegate.swift in Sources */,

@@ -9,27 +9,69 @@ import UIKit
 import PinLayout
 import SwiftUI
 
+struct VisionExampleCases {
+    let name: String
+    let action: Selector
+}
+
 class ViewController: UIViewController {
     
-    let faceTrackButton = UIButton(type: .system)
+    private let visionExamplerCases: [VisionExampleCases] = {
+        let faceRecognitionCase = VisionExampleCases(name: "面部识别", action: #selector(faceTrackButtonDidTappedAction))
+        let photoStack = VisionExampleCases(name: "照片堆叠", action: #selector(photoStackButtonDidTappedAction))
+        
+        return [faceRecognitionCase, photoStack]
+    }()
+    
+    private let tableView = UITableView(frame: .zero, style: .plain)
+    
+    static let kVisionExampleCases = "kVisionExampleCases"
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Vision使用Example"
-        
-        faceTrackButton.setTitle("人脸追踪", for: .normal);
-        faceTrackButton.addTarget(self, action: #selector(faceTrackButtonDidTappedAction(sender:)), for: .touchUpInside)
-        view.addSubview(faceTrackButton)
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: ViewController.kVisionExampleCases)
+        view.addSubview(tableView)
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        faceTrackButton.pin.top(view.pin.safeArea).margin(10).height(44).width(100).hCenter()
+        tableView.pin.all(view.pin.safeArea)
     }
     
-    @objc private func faceTrackButtonDidTappedAction(sender: UIButton) {
+    @objc private func faceTrackButtonDidTappedAction() {
         let faceTrackViewController = FaceTrackViewController()
         navigationController?.pushViewController(faceTrackViewController, animated: true)
+    }
+    
+    @objc private func photoStackButtonDidTappedAction() {
+        let photoStackViewController = PhotoStackViewController()
+        navigationController?.pushViewController(photoStackViewController, animated: true)
+    }
+}
+
+extension ViewController: UITableViewDelegate, UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return visionExamplerCases.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: ViewController.kVisionExampleCases, for: indexPath)
+        let visionCase = visionExamplerCases[indexPath.row]
+        cell.textLabel?.text = visionCase.name
+        cell.selectionStyle = .none
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let visionCase = visionExamplerCases[indexPath.row]
+        self.perform(visionCase.action)
     }
 }
 
