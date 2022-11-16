@@ -14,7 +14,7 @@ class AverageStackingFilter: CIFilter {
     
     var inputNewImage: CIImage?
     
-    var inputStackCount = 1
+    var inputStackCount = 1.0
     
     override init() {
         guard let url = Bundle.main.url(forResource: "default", withExtension: "metallib") else {

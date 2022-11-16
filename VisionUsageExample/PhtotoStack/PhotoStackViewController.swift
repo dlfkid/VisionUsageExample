@@ -15,9 +15,19 @@ class PhotoStackViewController: UIViewController {
     
     private let containerView = UIView()
     
-    private let combinedImageView = UIView()
+    private let combinedImageView = UIImageView()
     
     private let recordButton = RecordButton()
+    
+    private var saver: PhotoStackImageSaver?
+    
+    private let imageProcessor = PhotoStackProcessor()
+    
+    private let closeButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("close", for: .normal)
+        return button
+    }()
     
     private var session: AVCaptureSession?
     
@@ -38,6 +48,12 @@ class PhotoStackViewController: UIViewController {
         super.viewDidLoad()
         title = "照片堆叠"
         configreVideoCaptureLayer()
+        view.addSubview(previewView)
+        view.addSubview(recordButton)
+        view.addSubview(containerView)
+        containerView.addSubview(combinedImageView)
+        closeButton.addTarget(self, action: #selector(closeButtonDidTappedAction), for: .touchUpInside)
+        recordButton.addTarget(self, action: #selector(recordButtonDidTappedAction), for: .touchUpInside)
     }
     
     private func configreVideoCaptureLayer() {
@@ -71,12 +87,55 @@ class PhotoStackViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
+        previewView.pin.all()
+        recordButton.pin.bottom(view.pin.safeArea.bottom).hCenter().size(72)
+        containerView.pin.all()
+        combinedImageView.pin.all()
+    }
+}
+
+extension PhotoStackViewController {
+    @objc func closeButtonDidTappedAction() {
+        containerView.isHidden = true
+        recordButton.isEnabled = true
+        session?.startRunning()
+    }
+    
+    @objc func recordButtonDidTappedAction() {
+        recordButton.isEnabled = false
+        isRecording = true
+        saver = PhotoStackImageSaver()
+    }
+    
+    func stopRecording() {
+        isRecording = false
+        recordButton.progress = 0.0
+    }
+    
+    func displayCombinedImage(image: CIImage) {
+        session?.stopRunning()
+        combinedImageView.image = UIImage(ciImage: image)
+        containerView.isHidden = false
     }
 }
 
 extension PhotoStackViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-    
+        if !isRecording {
+            return
+        }
+        guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer),
+        let cgImage = CIImage(cvImageBuffer: imageBuffer).cgImage() else {
+            return
+        }
+        let image = CIImage(cgImage: cgImage)
+        imageProcessor.add(frame: image)
+        saver?.write(image: image, as: "stack_image_\(UUID().uuidString)")
+        let currentFrame = recordButton.progress * CGFloat(maxFrameCount)
+        recordButton.progress = (currentFrame + 1.0) / CGFloat(maxFrameCount)
+        if recordButton.progress >= 1.0 {
+            stopRecording()
+            imageProcessor.processFrames(completion: displayCombinedImage(image:))
+        }
     }
 }

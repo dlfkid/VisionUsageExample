@@ -36,6 +36,24 @@ class PhotoStackProcessor {
         frameBuffer.append(frame)
     }
     
+    func processFrames(completion: ((CIImage) -> Void)?) {
+        isProcessingFrames = true
+        self.completion = completion
+        let firstFrame = frameBuffer.removeFirst()
+        alignedFrameBuffer.append(firstFrame)
+        for frame in frameBuffer {
+            let request = VNTranslationalImageRegistrationRequest(targetedCIImage: frame)
+            do {
+                let sequenceHandler = VNSequenceRequestHandler()
+                try sequenceHandler.perform([request], on: firstFrame)
+            } catch {
+                print(error.localizedDescription)
+            }
+            alignImages(request: request, frame: frame)
+        }
+        combineFrames()
+    }
+    
     /// 执行帧对齐
     /// - Parameters:
     ///   - request: Vison的请求
@@ -50,8 +68,27 @@ class PhotoStackProcessor {
         alignedFrameBuffer.append(alignedFrame)
     }
     
-//    func combineFrames() {
-//        var finalImage = alignedFrameBuffer.removeFirst()
-//        let filter = AverageStackingFilter()
-//    }
+    func cleanUp(image: CIImage) {
+        frameBuffer.removeAll()
+        alignedFrameBuffer.removeAll()
+        isProcessingFrames = false
+        if let completion = completion {
+            DispatchQueue.main.async {
+                completion(image)
+            }
+        }
+        completion = nil
+    }
+    
+    func combineFrames() {
+        var finalImage = alignedFrameBuffer.removeFirst()
+        let filter = AverageStackingFilter()
+        for (i, image) in alignedFrameBuffer.enumerated() {
+            filter.inputCurrentStack = finalImage
+            filter.inputNewImage = image
+            filter.inputStackCount = Double(i + 1)
+            finalImage = filter.outputImage()!
+        }
+        cleanUp(image: finalImage)
+    }
 }

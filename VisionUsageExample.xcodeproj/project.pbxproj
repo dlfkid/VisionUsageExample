@@ -24,6 +24,7 @@
 		FECF644729248ABE0064CC28 /* PhotoStackProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECF644629248ABE0064CC28 /* PhotoStackProcessor.swift */; };
 		FECF6449292492210064CC28 /* AverageStacking.metal in Sources */ = {isa = PBXBuildFile; fileRef = FECF6448292492210064CC28 /* AverageStacking.metal */; };
 		FECF644B292493540064CC28 /* AverageStackingFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECF644A292493540064CC28 /* AverageStackingFilter.swift */; };
+		FECF644D2924B9720064CC28 /* CIImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECF644C2924B9720064CC28 /* CIImageExtensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,7 @@
 		FECF644629248ABE0064CC28 /* PhotoStackProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoStackProcessor.swift; sourceTree = "<group>"; };
 		FECF6448292492210064CC28 /* AverageStacking.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = AverageStacking.metal; sourceTree = "<group>"; };
 		FECF644A292493540064CC28 /* AverageStackingFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AverageStackingFilter.swift; sourceTree = "<group>"; };
+		FECF644C2924B9720064CC28 /* CIImageExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CIImageExtensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +143,7 @@
 			isa = PBXGroup;
 			children = (
 				FE96AC59291D003E00CAADC0 /* CoreGraphicExtensions.swift */,
+				FECF644C2924B9720064CC28 /* CIImageExtensions.swift */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -261,6 +264,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FECF643E29233F760064CC28 /* PhotoStackViewController.swift in Sources */,
+				FECF644D2924B9720064CC28 /* CIImageExtensions.swift in Sources */,
 				FECF644B292493540064CC28 /* AverageStackingFilter.swift in Sources */,
 				FECF6449292492210064CC28 /* AverageStacking.metal in Sources */,
 				FE96AC56291CE32A00CAADC0 /* FacePresentView.swift in Sources */,
