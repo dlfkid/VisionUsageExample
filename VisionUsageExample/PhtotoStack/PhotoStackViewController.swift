@@ -54,6 +54,7 @@ class PhotoStackViewController: UIViewController {
         containerView.addSubview(combinedImageView)
         closeButton.addTarget(self, action: #selector(closeButtonDidTappedAction), for: .touchUpInside)
         recordButton.addTarget(self, action: #selector(recordButtonDidTappedAction), for: .touchUpInside)
+        containerView.isHidden = true
     }
     
     private func configreVideoCaptureLayer() {
