@@ -20,6 +20,10 @@
 		FECB663028ABB635005F45DA /* FaceTrackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECB662F28ABB635005F45DA /* FaceTrackViewController.swift */; };
 		FECF643E29233F760064CC28 /* PhotoStackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECF643D29233F760064CC28 /* PhotoStackViewController.swift */; };
 		FECF64432923438A0064CC28 /* RecordButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECF64422923438A0064CC28 /* RecordButton.swift */; };
+		FECF6445292484B10064CC28 /* PhotoStackImageSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECF6444292484B10064CC28 /* PhotoStackImageSaver.swift */; };
+		FECF644729248ABE0064CC28 /* PhotoStackProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECF644629248ABE0064CC28 /* PhotoStackProcessor.swift */; };
+		FECF6449292492210064CC28 /* AverageStacking.metal in Sources */ = {isa = PBXBuildFile; fileRef = FECF6448292492210064CC28 /* AverageStacking.metal */; };
+		FECF644B292493540064CC28 /* AverageStackingFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECF644A292493540064CC28 /* AverageStackingFilter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +44,10 @@
 		FECB662F28ABB635005F45DA /* FaceTrackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceTrackViewController.swift; sourceTree = "<group>"; };
 		FECF643D29233F760064CC28 /* PhotoStackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoStackViewController.swift; sourceTree = "<group>"; };
 		FECF64422923438A0064CC28 /* RecordButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordButton.swift; sourceTree = "<group>"; };
+		FECF6444292484B10064CC28 /* PhotoStackImageSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoStackImageSaver.swift; sourceTree = "<group>"; };
+		FECF644629248ABE0064CC28 /* PhotoStackProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoStackProcessor.swift; sourceTree = "<group>"; };
+		FECF6448292492210064CC28 /* AverageStacking.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = AverageStacking.metal; sourceTree = "<group>"; };
+		FECF644A292493540064CC28 /* AverageStackingFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AverageStackingFilter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,8 +127,12 @@
 		FECF644029233FFA0064CC28 /* PhtotoStack */ = {
 			isa = PBXGroup;
 			children = (
+				FECF6448292492210064CC28 /* AverageStacking.metal */,
+				FECF644A292493540064CC28 /* AverageStackingFilter.swift */,
 				FECF643D29233F760064CC28 /* PhotoStackViewController.swift */,
 				FECF64422923438A0064CC28 /* RecordButton.swift */,
+				FECF6444292484B10064CC28 /* PhotoStackImageSaver.swift */,
+				FECF644629248ABE0064CC28 /* PhotoStackProcessor.swift */,
 			);
 			path = PhtotoStack;
 			sourceTree = "<group>";
@@ -249,10 +261,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				FECF643E29233F760064CC28 /* PhotoStackViewController.swift in Sources */,
+				FECF644B292493540064CC28 /* AverageStackingFilter.swift in Sources */,
+				FECF6449292492210064CC28 /* AverageStacking.metal in Sources */,
 				FE96AC56291CE32A00CAADC0 /* FacePresentView.swift in Sources */,
 				FECF64432923438A0064CC28 /* RecordButton.swift in Sources */,
+				FECF644729248ABE0064CC28 /* PhotoStackProcessor.swift in Sources */,
 				FE09639728ABA0A700590300 /* ViewController.swift in Sources */,
 				FE09639328ABA0A700590300 /* AppDelegate.swift in Sources */,
+				FECF6445292484B10064CC28 /* PhotoStackImageSaver.swift in Sources */,
 				FE09639528ABA0A700590300 /* SceneDelegate.swift in Sources */,
 				FE96AC5A291D003E00CAADC0 /* CoreGraphicExtensions.swift in Sources */,
 				FE96AC58291CF31400CAADC0 /* LaserView.swift in Sources */,
